@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.weatherproject.mainController">
+   <children>
+    <AnchorPane layoutX="81.0" layoutY="258.0" prefHeight="79.0" prefWidth="412.0">
+         <children>
+            <CheckBox layoutX="42.0" layoutY="14.0" mnemonicParsing="false" text="Prędkość wiatru" />
+            <CheckBox layoutX="249.0" layoutY="45.0" mnemonicParsing="false" text="Opady" />
+            <CheckBox layoutX="163.0" layoutY="14.0" mnemonicParsing="false" text="Temp. gleby" />
+            <CheckBox layoutX="67.0" layoutY="45.0" mnemonicParsing="false" text="Ciśnienie przy powierzchni" />
+            <CheckBox layoutX="267.0" layoutY="14.0" mnemonicParsing="false" text="Temp. na wys. 2m" />
+         </children>
+      </AnchorPane>
+      <Label alignment="CENTER" blendMode="HARD_LIGHT" layoutX="80.0" layoutY="20.0" prefHeight="49.0" prefWidth="414.0" text="A p l i k a c j a   P o g o d o w a" textAlignment="CENTER">
+         <font>
+            <Font name="Roboto Light" size="25.0" />
+         </font>
+      </Label>
+      <TextField fx:id="locationInput" layoutX="81.0" layoutY="79.0" prefHeight="25.0" prefWidth="254.0" />
+      <ComboBox fx:id="locationType" layoutX="346.0" layoutY="79.0" onAction="#updateLocationType" prefHeight="25.0" prefWidth="111.0">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Miasto" />
+               <String fx:value="Koordynaty" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <Button onMouseClicked="#launchGraphWindow" layoutX="465.0" layoutY="79.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="30.0" text="🔍" />
+      <Label alignment="TOP_RIGHT" layoutX="398.0" layoutY="352.0" prefHeight="15.0" prefWidth="171.0" text="Projekt stworzony w ramach zajęć JPO">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label alignment="BOTTOM_RIGHT" layoutX="398.0" layoutY="337.0" prefHeight="14.0" prefWidth="171.0" text="Maksym Górny" textAlignment="RIGHT">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="238.0" prefHeight="25.0" prefWidth="375.0" text="W y b ó r   d a n y c h   d o   w i z u a l i z a c j i " textAlignment="CENTER">
+         <font>
+            <Font name="Roboto Light" size="14.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="98.0" layoutX="80.0" layoutY="233.0" stroke="#616161" strokeType="INSIDE" width="414.0" />
+      <Line endX="277.0" layoutX="206.0" layoutY="265.0" startX="-115.0" stroke="#4a4a4a" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="98.0" layoutX="81.0" layoutY="124.0" stroke="#616161" strokeType="INSIDE" width="414.0" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="101.0" layoutY="129.0" prefHeight="25.0" prefWidth="375.0" text="W y b ó r   t r y b u   d a n y c h" textAlignment="CENTER">
+         <font>
+            <Font name="Roboto Light" size="14.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="historicalData" layoutX="121.0" layoutY="168.0" mnemonicParsing="false" onMouseClicked="#updateDataType" text="Dane historyczne" />
+      <Line endX="277.0" layoutX="207.0" layoutY="156.0" startX="-115.0" stroke="#4a4a4a" />
+      <RadioButton fx:id="forecastData" layoutX="121.0" layoutY="192.0" mnemonicParsing="false" onMouseClicked="#updateDataType" text="Prognoza pogody " />
+      <DatePicker fx:id="datePick" layoutX="262.0" layoutY="181.0" onAction="#checkIfFirstDateCorrect" prefHeight="25.0" prefWidth="98.0" />
+      <ComboBox fx:id="forecastDays" layoutX="402.0" layoutY="181.0" prefHeight="25.0" prefWidth="66.0" visible="false" />
+      <Label fx:id="forecastDaysLabel" layoutX="286.0" layoutY="184.0" prefHeight="17.0" prefWidth="116.0" text="Liczba dni prognozy:" visible="false" />
+      <DatePicker fx:id="datePick1" layoutX="371.0" layoutY="181.0" onAction="#checkIfSecondDateCorrect" prefHeight="25.0" prefWidth="98.0" />
+      <Label fx:id="historicalDataLabel" layoutX="263.0" layoutY="168.0" prefHeight="17.0" prefWidth="86.0" text="Od:" textAlignment="RIGHT">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <Label fx:id="historicalDataLabel1" layoutX="373.0" layoutY="168.0" prefHeight="17.0" prefWidth="86.0" text="Do:" textAlignment="RIGHT">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
+      <TextField fx:id="latitude" layoutX="81.0" layoutY="79.0" prefHeight="25.0" prefWidth="98.0" visible="false" />
+      <TextField fx:id="longitude" layoutX="213.0" layoutY="79.0" prefHeight="25.0" prefWidth="98.0" visible="false" />
+      <Label fx:id="latLabel" alignment="TOP_LEFT" layoutX="180.0" layoutY="78.0" prefHeight="27.0" prefWidth="30.0" text="°N" visible="false">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="longLabel" alignment="TOP_LEFT" layoutX="311.0" layoutY="78.0" prefHeight="27.0" prefWidth="30.0" text="°S" visible="false">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>
