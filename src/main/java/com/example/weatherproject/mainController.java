@@ -32,6 +32,11 @@ public class mainController implements Initializable{
     @FXML private TextField latitude;
     @FXML private TextField longitude;
     @FXML private Label testLabel;
+    @FXML private CheckBox windSpeedCheckBox;
+    @FXML private CheckBox precipitationCheckBox;
+    @FXML private CheckBox soilTempCheckBox;
+    @FXML private CheckBox pressureCheckBox;
+    @FXML private CheckBox airTempCheckBox;
 
     private TextFormatter<String> createFormatter() {                                   // Do TextField, zeby mozna bylo tylko wpisac liczbe
         return new TextFormatter<>(change -> {
@@ -46,9 +51,13 @@ public class mainController implements Initializable{
         });
     }
 
+    public boolean isLocationCity() {
+        return locationType.getItems().contains("Miasto");
+    }
+
     @Override public void initialize(URL location, ResourceBundle resources){
         locationType.getSelectionModel().selectFirst();
-        locationInput.setPromptText("Wyszukaj miasto...");
+        locationInput.setPromptText("Wyszukaj miasto (po angielsku)...");
         latitude.setPromptText("Szerokość");
         longitude.setPromptText("Wysokość");
         dataTypeGroup = new ToggleGroup();
@@ -131,9 +140,12 @@ public class mainController implements Initializable{
 
     @FXML public void launchGraphWindow() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(mainApplication.class.getResource("graphWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 573, 367);
+        Scene scene = new Scene(fxmlLoader.load(), 500, 350);
 
         Stage graphStage = new Stage();
+
+        graphWindowController controller = fxmlLoader.getController();
+        controller.setMainController(this);
 
         graphStage.setTitle("Tescik");
         graphStage.setScene(scene);

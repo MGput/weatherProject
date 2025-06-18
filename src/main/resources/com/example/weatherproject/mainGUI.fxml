@@ -9,15 +9,6 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.weatherproject.mainController">
    <children>
-    <AnchorPane layoutX="81.0" layoutY="258.0" prefHeight="79.0" prefWidth="412.0">
-         <children>
-            <CheckBox layoutX="42.0" layoutY="14.0" mnemonicParsing="false" text="Prędkość wiatru" />
-            <CheckBox layoutX="249.0" layoutY="45.0" mnemonicParsing="false" text="Opady" />
-            <CheckBox layoutX="163.0" layoutY="14.0" mnemonicParsing="false" text="Temp. gleby" />
-            <CheckBox layoutX="67.0" layoutY="45.0" mnemonicParsing="false" text="Ciśnienie przy powierzchni" />
-            <CheckBox layoutX="267.0" layoutY="14.0" mnemonicParsing="false" text="Temp. na wys. 2m" />
-         </children>
-      </AnchorPane>
       <Label alignment="CENTER" blendMode="HARD_LIGHT" layoutX="80.0" layoutY="20.0" prefHeight="49.0" prefWidth="414.0" text="A p l i k a c j a   P o g o d o w a" textAlignment="CENTER">
          <font>
             <Font name="Roboto Light" size="25.0" />
@@ -32,7 +23,7 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <Button onMouseClicked="#launchGraphWindow" layoutX="465.0" layoutY="79.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="30.0" text="🔍" />
+      <Button layoutX="465.0" layoutY="79.0" mnemonicParsing="false" onMouseClicked="#launchGraphWindow" prefHeight="25.0" prefWidth="30.0" text="🔍" />
       <Label alignment="TOP_RIGHT" layoutX="398.0" layoutY="352.0" prefHeight="15.0" prefWidth="171.0" text="Projekt stworzony w ramach zajęć JPO">
          <font>
             <Font size="10.0" />
@@ -75,6 +66,13 @@
       </Label>
       <TextField fx:id="latitude" layoutX="81.0" layoutY="79.0" prefHeight="25.0" prefWidth="98.0" visible="false" />
       <TextField fx:id="longitude" layoutX="213.0" layoutY="79.0" prefHeight="25.0" prefWidth="98.0" visible="false" />
+       <AnchorPane layoutX="81.0" layoutY="258.0" prefHeight="79.0" prefWidth="412.0">
+           <CheckBox fx:id="windSpeedCheckBox" layoutX="42.0" layoutY="14.0" mnemonicParsing="false" text="Prędkość wiatru" />
+           <CheckBox fx:id="precipitationCheckBox" layoutX="249.0" layoutY="45.0" mnemonicParsing="false" text="Opady" />
+           <CheckBox fx:id="soilTempCheckBox" layoutX="163.0" layoutY="14.0" mnemonicParsing="false" text="Temp. gleby" />
+           <CheckBox fx:id="pressureCheckBox" layoutX="67.0" layoutY="45.0" mnemonicParsing="false" text="Ciśnienie przy powierzchni" />
+           <CheckBox fx:id="airTempCheckBox" layoutX="267.0" layoutY="14.0" mnemonicParsing="false" text="Temp. na wys. 2m" />
+       </AnchorPane>
       <Label fx:id="latLabel" alignment="TOP_LEFT" layoutX="180.0" layoutY="78.0" prefHeight="27.0" prefWidth="30.0" text="°N" visible="false">
          <font>
             <Font size="17.0" />

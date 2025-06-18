@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.weatherproject.mainController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.weatherproject.graphWindowController">
    <children>
       <Button onMouseClicked="#testLabel" layoutX="274.0" layoutY="109.0" mnemonicParsing="false" text="Click me!" />
       <Label fx:id="testLabel" layoutX="281.0" layoutY="237.0" prefHeight="17.0" prefWidth="39.0" />
