@@ -66,4 +66,5 @@
          <NumberAxis label="°C" side="LEFT" />
       </yAxis>
    </LineChart>
+   <Button fx:id="exportButton" onAction="#exportJsonData" layoutX="36.0" layoutY="27.0" mnemonicParsing="false" text="Eksportuj" />
 </Pane>

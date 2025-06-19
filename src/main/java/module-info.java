@@ -10,6 +10,8 @@ module com.example.weatherproject {
     requires eu.hansolo.tilesfx;
     requires java.net.http;
     requires com.google.gson;
+    requires java.desktop;
+    requires redis.clients.jedis;
 
     opens com.example.weatherproject to javafx.fxml;
     exports com.example.weatherproject;

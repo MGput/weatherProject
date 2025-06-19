@@ -1,6 +1,7 @@
 package com.example.weatherproject;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,11 +14,21 @@ import javafx.scene.control.ToggleGroup;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.nio.file.Files;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 public class graphWindowController implements Initializable {
     @FXML private Label testLabel;
@@ -32,7 +43,9 @@ public class graphWindowController implements Initializable {
     @FXML private LineChart<String, Number> soilTempChart;
     @FXML private LineChart<String, Number> pressureChart;
     @FXML private LineChart<String, Number> airTempChart;
+    @FXML private Button exportButton;
     private JsonElement jsonResponse;
+    private JedisPool jedisPool;
 
     private final String[] windSpeedVariables = {
             "wind_speed_10m", "wind_speed_80m", "wind_speed_100m",
@@ -58,8 +71,14 @@ public class graphWindowController implements Initializable {
         airTempCheckBox.setToggleGroup(dataVariableGroup);
         windSpeedCheckBox.setSelected(true);
 
+        jedisPool = new JedisPool(new JedisPoolConfig(), "localhost");
+
         initializeColorMappings();
         initializeCharts();
+
+        exportButton.getScene().getWindow().setOnCloseRequest(event -> {
+            shutdown();
+        });
     }
 
     private void initializeColorMappings() {
@@ -108,7 +127,15 @@ public class graphWindowController implements Initializable {
     }
 
     public void forwardJsonResponse(JsonElement response) {
-        jsonResponse = response;
+        try (Jedis jedis = jedisPool.getResource()) {
+            String cachedData = jedis.get("weather:latest");
+            if (cachedData != null) {
+                jsonResponse = new JsonParser().parse(cachedData);
+            } else {
+                jsonResponse = response;
+                jedis.setex("weather:latest", 3600, response.toString()); // TTL 1 godzina
+            }
+        } catch (Exception e) { jsonResponse = response; }
         try {
             updateCharts();
             updateSelection();
@@ -266,6 +293,28 @@ public class graphWindowController implements Initializable {
             case "airTempCheckBox":
                 airTempChart.setVisible(true);
                 break;
+        }
+    }
+
+    @FXML
+    public void exportJsonData() throws IOException {
+        try {
+            File folder = new File("weather_exports");
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+            File file = new File(folder, "weather_" + System.currentTimeMillis() + ".json");
+            Files.write(file.toPath(), jsonResponse.toString().getBytes());
+            Desktop.getDesktop().open(file.getParentFile());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void shutdown() {
+        if (jedisPool != null) {
+            jedisPool.close();
         }
     }
 }
