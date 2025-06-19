@@ -3,6 +3,7 @@ package com.example.weatherproject;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
@@ -262,15 +263,27 @@ public class mainController implements Initializable{
     }
 
     private void launchGraphWindow(JsonElement apiResponse) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(mainApplication.class.getResource("graphWindow.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 745, 449);
-        Stage graphStage = new Stage();
-        graphWindowController controller = fxmlLoader.getController();
-        controller.forwardJsonResponse(apiResponse);
-        graphStage.setTitle("Test");
-        graphStage.setScene(scene);
-        graphStage.setResizable(false);
-        graphStage.show();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(mainApplication.class.getResource("graphWindow.fxml"));
+            Parent root = fxmlLoader.load();
+            graphWindowController controller = fxmlLoader.getController();
+            Scene scene = new Scene(root, 745, 449);
+            Stage graphStage = new Stage();
+            controller.forwardJsonResponse(apiResponse);
+            graphStage.setTitle("Wykresy");
+            graphStage.setScene(scene);
+            graphStage.setResizable(false);
+
+            graphStage.setOnCloseRequest(event -> {
+                controller.shutdown();
+            });
+
+            graphStage.show();
+        }
+        catch (Exception e) {
+            System.err.println("Error loading graph window: " + e.getMessage());
+            System.err.println("Failed to open graph window");
+        }
     }
 
     public void test(){

@@ -46,6 +46,7 @@ public class graphWindowController implements Initializable {
     @FXML private Button exportButton;
     private JsonElement jsonResponse;
     private JedisPool jedisPool;
+    private boolean redisAvailable = false;
 
     private final String[] windSpeedVariables = {
             "wind_speed_10m", "wind_speed_80m", "wind_speed_100m",
@@ -71,14 +72,47 @@ public class graphWindowController implements Initializable {
         airTempCheckBox.setToggleGroup(dataVariableGroup);
         windSpeedCheckBox.setSelected(true);
 
-        jedisPool = new JedisPool(new JedisPoolConfig(), "localhost");
+        try {
+            jedisPool = new JedisPool("redis://localhost:6379");
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.ping();
+                redisAvailable = true;
+            }
+        } catch (Exception e) {
+            System.err.println("Redis unavailable, running in fallback mode");
+            redisAvailable = false;
+        }
+
+        initializeRedis();
 
         initializeColorMappings();
         initializeCharts();
 
-        exportButton.getScene().getWindow().setOnCloseRequest(event -> {
-            shutdown();
+        System.out.println("przed exportbutton");
+
+        Platform.runLater(() -> {
+            if (exportButton.getScene() != null && exportButton.getScene().getWindow() != null) {
+                exportButton.getScene().getWindow().setOnCloseRequest(event -> shutdown());
+            }
         });
+
+        System.out.println("po export button");
+
+        System.out.println("zainicjowano kontroler grafu");
+    }
+
+    private void initializeRedis() {
+        try {
+            jedisPool = new JedisPool("redis://localhost:6379");
+            try (Jedis jedis = jedisPool.getResource()) {
+                jedis.ping();
+                redisAvailable = true;
+                System.out.println("Redis connection established");
+            }
+        } catch (Exception e) {
+            System.err.println("Redis unavailable, running in fallback mode: " + e.getMessage());
+            redisAvailable = false;
+        }
     }
 
     private void initializeColorMappings() {
@@ -127,15 +161,20 @@ public class graphWindowController implements Initializable {
     }
 
     public void forwardJsonResponse(JsonElement response) {
-        try (Jedis jedis = jedisPool.getResource()) {
-            String cachedData = jedis.get("weather:latest");
-            if (cachedData != null) {
-                jsonResponse = new JsonParser().parse(cachedData);
-            } else {
+        if(redisAvailable) {
+            try (Jedis jedis = jedisPool.getResource()) {
+                String cacheKey = "weather:" + response.toString().hashCode();
+                String cachedData = jedis.get(cacheKey);
+                if (cachedData != null) {
+                    jsonResponse = new JsonParser().parse(cachedData);
+                } else {
+                    jsonResponse = response;
+                    jedis.setex(cacheKey, 3600, response.toString()); // TTL 1 godzina
+                }
+            } catch (Exception e) {
                 jsonResponse = response;
-                jedis.setex("weather:latest", 3600, response.toString()); // TTL 1 godzina
             }
-        } catch (Exception e) { jsonResponse = response; }
+        }else jsonResponse = response;
         try {
             updateCharts();
             updateSelection();
@@ -211,11 +250,14 @@ public class graphWindowController implements Initializable {
                 XYChart.Series<String, Number> series = new XYChart.Series<>();
                 series.setName(namePrefix + variable.replace("_", " "));
 
-                int maxPoints = Math.min(100, Math.min(timeArray.size(), dataArray.size()));
+                int maxPoints = Math.min(timeArray.size(), dataArray.size());
                 for (int i = 0; i < maxPoints; i++) {
                     String time = formatTime(timeArray.get(i).getAsString());
-                    Number value = dataArray.get(i).getAsNumber();
-                    series.getData().add(new XYChart.Data<>(time, value));
+                    JsonElement element = dataArray.get(i);
+                    if (!element.isJsonNull()) {
+                        Number value = element.getAsNumber();
+                        series.getData().add(new XYChart.Data<>(time, value));
+                    }
                 }
 
                 chart.getData().add(series);
@@ -243,11 +285,14 @@ public class graphWindowController implements Initializable {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(seriesName);
 
-        int maxPoints = Math.min(100, Math.min(timeArray.size(), dataArray.size()));
+        int maxPoints = Math.min(timeArray.size(), dataArray.size());
         for (int i = 0; i < maxPoints; i++) {
             String time = formatTime(timeArray.get(i).getAsString());
-            Number value = dataArray.get(i).getAsNumber();
-            series.getData().add(new XYChart.Data<>(time, value));
+            JsonElement element = dataArray.get(i);
+            if (!element.isJsonNull()) {
+                Number value = element.getAsNumber();
+                series.getData().add(new XYChart.Data<>(time, value));
+            }
         }
 
         chart.getData().add(series);
