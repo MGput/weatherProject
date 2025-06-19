@@ -21,12 +21,44 @@
       <RadioButton fx:id="pressureCheckBox" layoutX="67.0" layoutY="45.0" mnemonicParsing="false" onAction="#updateSelection" text="Ciśnienie przy powierzchni" />
       <RadioButton fx:id="airTempCheckBox" layoutX="267.0" layoutY="14.0" mnemonicParsing="false" onAction="#updateSelection" text="Temp. na wys. 2m" />
    </AnchorPane>
-   <LineChart layoutX="36.0" layoutY="118.0" prefHeight="314.0" prefWidth="673.0">
+   <LineChart fx:id="windSpeedGraph" layoutX="36.0" layoutY="118.0" prefHeight="314.0" prefWidth="673.0">
      <xAxis>
        <CategoryAxis side="BOTTOM" />
      </xAxis>
      <yAxis>
        <NumberAxis side="LEFT" />
      </yAxis>
+   </LineChart>
+   <LineChart fx:id="rainGraph" layoutX="36.0" layoutY="118.0" prefHeight="314.0" prefWidth="673.0" visible="false">
+      <xAxis>
+         <CategoryAxis side="BOTTOM" />
+      </xAxis>
+      <yAxis>
+         <NumberAxis side="LEFT" />
+      </yAxis>
+   </LineChart>
+   <LineChart fx:id="soilTempGraph" layoutX="36.0" layoutY="118.0" prefHeight="314.0" prefWidth="673.0" visible="false">
+      <xAxis>
+         <CategoryAxis side="BOTTOM" />
+      </xAxis>
+      <yAxis>
+         <NumberAxis side="LEFT" />
+      </yAxis>
+   </LineChart>
+   <LineChart fx:id="pressureGraph" layoutX="36.0" layoutY="118.0" prefHeight="314.0" prefWidth="673.0" visible="false">
+      <xAxis>
+         <CategoryAxis side="BOTTOM" />
+      </xAxis>
+      <yAxis>
+         <NumberAxis side="LEFT" />
+      </yAxis>
+   </LineChart>
+   <LineChart fx:id="airTempGraph" layoutX="36.0" layoutY="118.0" prefHeight="314.0" prefWidth="673.0" visible="false">
+      <xAxis>
+         <CategoryAxis side="BOTTOM" />
+      </xAxis>
+      <yAxis>
+         <NumberAxis side="LEFT" />
+      </yAxis>
    </LineChart>
 </Pane>

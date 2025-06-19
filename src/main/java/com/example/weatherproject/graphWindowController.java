@@ -2,6 +2,7 @@ package com.example.weatherproject;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -19,6 +20,11 @@ public class graphWindowController implements Initializable {
     @FXML private RadioButton pressureCheckBox;
     @FXML private RadioButton airTempCheckBox;
     @FXML private ToggleGroup dataVariableGroup;
+    @FXML private Chart windSpeedChart;
+    @FXML private Chart rainChart;
+    @FXML private Chart soilTempChart;
+    @FXML private Chart pressureChart;
+    @FXML private Chart airTempChart;
     private String jsonResponse;
 
     @Override
