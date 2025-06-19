@@ -19,6 +19,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javafx.scene.input.KeyCode;
 
+import static com.example.weatherproject.APIcontroller.getWeatherInfo;
+
 public class mainController implements Initializable{
     @FXML private ComboBox<String> locationType;
     @FXML private TextField locationInput;
@@ -255,10 +257,11 @@ public class mainController implements Initializable{
         reqURL += reqURLloc + reqURLdate + reqURLvariables;
 
         System.out.println(reqURL);
-        launchGraphWindow(reqURL);
+        JsonElement reqResponse = getWeatherInfo(reqURL);
+        launchGraphWindow(reqResponse);
     }
 
-    private void launchGraphWindow(String apiResponse) throws IOException {
+    private void launchGraphWindow(JsonElement apiResponse) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(mainApplication.class.getResource("graphWindow.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 745, 449);
         Stage graphStage = new Stage();

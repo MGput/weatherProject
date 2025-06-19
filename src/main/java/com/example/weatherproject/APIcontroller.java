@@ -1,5 +1,6 @@
 package com.example.weatherproject;
 
+import com.google.gson.JsonObject;
 import javafx.application.Application;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -21,8 +22,15 @@ public class APIcontroller {
     }
 
     public static JsonElement getCityCoordinates(String cityLocation) throws Exception {
-        return apiRequest("https://geocoding-api.open-meteo.com/v1/search?name="+cityLocation+"&count=1&language=en&format=json");
+        JsonElement response = apiRequest("https://geocoding-api.open-meteo.com/v1/search?name="+cityLocation+"&count=1&language=en&format=json");
+        //System.out.println(response.toString());
+        return response;
     }
 
+    public static JsonElement getWeatherInfo(String URL) throws Exception {
+        JsonElement response = apiRequest(URL);
+        //System.out.println(response.toString());
+        return response;
+    }
 
 }
