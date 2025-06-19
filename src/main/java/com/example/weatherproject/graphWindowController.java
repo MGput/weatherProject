@@ -2,7 +2,10 @@ package com.example.weatherproject;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,26 +13,34 @@ import java.util.ResourceBundle;
 public class graphWindowController implements Initializable {
     @FXML private Label testLabel;
     private mainController mainControllerRef;
-    private boolean searchTypeIsCity;
+    @FXML private RadioButton windSpeedCheckBox;
+    @FXML private RadioButton rainCheckBox;
+    @FXML private RadioButton soilTempCheckBox;
+    @FXML private RadioButton pressureCheckBox;
+    @FXML private RadioButton airTempCheckBox;
+    @FXML private ToggleGroup dataVariableGroup;
+    private String jsonResponse;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        dataVariableGroup = new ToggleGroup();
+        windSpeedCheckBox.setToggleGroup(dataVariableGroup);
+        rainCheckBox.setToggleGroup(dataVariableGroup);
+        soilTempCheckBox.setToggleGroup(dataVariableGroup);
+        pressureCheckBox.setToggleGroup(dataVariableGroup);
+        airTempCheckBox.setToggleGroup(dataVariableGroup);
+        windSpeedCheckBox.setSelected(true);
     }
 
-    public void setMainController(mainController mainController) {
-        this.mainControllerRef = mainController;
-        initializeWithMainController(); // Call after setting the reference
+    private String getSelectedToggleId() {
+        return ((RadioButton) dataVariableGroup.getSelectedToggle()).getId();
     }
 
-    private void initializeWithMainController() {
-        if (mainControllerRef != null) {
-            searchTypeIsCity = mainControllerRef.isLocationCity();
-        }
+    public void forwardJsonResponse(String response){
+        jsonResponse = response;
     }
 
-    @FXML
-    public void testLabel(){
-        testLabel.setText("Hello :)");
+    public void updateSelection(){
+
     }
 }

@@ -12,7 +12,7 @@ public class mainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(mainApplication.class.getResource("mainGUI.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 573, 367);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Aplikacja Pogodowa");
         stage.setScene(scene);
         stage.setResizable(false);

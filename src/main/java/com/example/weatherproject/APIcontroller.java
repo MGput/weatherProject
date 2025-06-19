@@ -9,7 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class APIcontroller {
-    private JsonElement apiRequest(String url) throws Exception {
+    private static JsonElement apiRequest(String url) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -19,4 +19,10 @@ public class APIcontroller {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return JsonParser.parseString(response.body());
     }
+
+    public static JsonElement getCityCoordinates(String cityLocation) throws Exception {
+        return apiRequest("https://geocoding-api.open-meteo.com/v1/search?name="+cityLocation+"&count=1&language=en&format=json");
+    }
+
+
 }
